@@ -62,7 +62,7 @@ class DijkstraTestCase(unittest.TestCase):
             (8, 2, 1), (8, 9, 1),
             (9, 6, 2), (9, 4, 1), (9, 5, 5)
         ]
-        ans = [0, 6, 10, 8, 11, 9, 2, 7]
+        ans = [0, 6, 2, 8, 9, 3, 2, 6, 7]
 
         G, n = build_graph(pairs)
         res = list(solve(G, n, 0))
