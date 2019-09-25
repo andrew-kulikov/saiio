@@ -12,10 +12,9 @@ def restore_path(B, X, c):
 
 
 def solve(F, c):
-    n = len(F)
-    m = len(F[0])
-    B = np.zeros(np.shape(F), dtype=np.int32)
-    X = np.zeros(np.shape(F), dtype=np.int32)
+    n, m = np.shape(F)
+    B = np.zeros((n, m), dtype=np.int32)
+    X = np.zeros((n, m), dtype=np.int32)
     B[0] = F[0]
     X[0] = list(range(m))
     for x in range(1, n):
