@@ -13,7 +13,7 @@ class SimplexTest(unittest.TestCase):
         d_hi = [2, 4, 4, 3, 3, 5]
 
         dual = DualSimplex(A, b, c, d_lo, d_hi)
-        x, J, f_val = dual.solve()
+        x, J, f_val = dual.solve([3, 4, 5])
 
         x_expected = [3 / 2, 1, 2, 3 / 2, -1, 0]
         for i, xi in enumerate(x):
