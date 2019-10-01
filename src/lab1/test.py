@@ -17,7 +17,7 @@ class SimplexTest(unittest.TestCase):
 
         x_expected = [3 / 2, 1, 2, 3 / 2, -1, 0]
         for i, xi in enumerate(x):
-            self.assertAlmostEqual(xi, x_expected[i], 5)
+            self.assertAlmostEqual(xi, x_expected[i], 3)
         self.assertAlmostEqual(f_val, 13, 5)
 
     def test_should_solve_task2(self):
