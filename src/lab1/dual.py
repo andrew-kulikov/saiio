@@ -24,6 +24,7 @@ class DualSimplex:
         Ab = np.zeros((m, m))
         cb = []
         
+        print(Ab.shape, A.shape, len(J))
         for i, j in enumerate(J):
             Ab[:, i] = A[:, j]
             cb.append(c[j])
@@ -92,7 +93,7 @@ class DualSimplex:
         return self.iterations(A, c, x, J, j0, lowest_theta_pos, Ab, Ab_inv, iteration + 1)
 
     def find_optimal_plan(self):
-        n, m = self.A.shape
+        m, n = self.A.shape
         A_new = self.A
 
         for i, bi in enumerate(self.b):
@@ -101,12 +102,12 @@ class DualSimplex:
                 A_new[i] = A_new[i] * -1
         print('AAAA', A_new)
         print(self.b)
-        x = [0] * n + self.b
-        c = [0] * n + [-1] * m
+        x = [0] * m + self.b
+        c = [0] * m + [-1] * n
         J = list(range(n, n + m))
         print('x:', x)
 
-        A_new = np.hstack((A_new, np.eye(n)))
+        A_new = np.hstack((A_new, np.eye(m)))
         print(A_new)
         x_found, J_found = self.iterations(A_new, c, x, J)
         print(x_found, J_found)
