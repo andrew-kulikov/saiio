@@ -33,6 +33,30 @@ class FloydTestCase(unittest.TestCase):
                                  [3, 2, 2, 2, 4, 5, 6, 7],
                                  [3, 2, 2, 3, 2, 5, 6, 7],
                                  [4, 4, 4, 4, 4, 5, 6, 7]])
+    
+    def test_task2(self):
+        i = np.inf
+        g = [[0, 3, 2, 6, i, i, i, i, i],
+             [i, 0, i, 2, i, i, i, i, i],
+             [i, i, 0, i, i, 4, i, i, i],
+             [i, i, 3, 0, 1, i, 6, i, i],
+             [i, i, i, i, 0, i, 7, 5, i],
+             [i, i, i, i, 5, 0, i, 4, i],
+             [i, i, i, i, i, i, 0, 2, 4],
+             [i, i, i, i, i, i, i, 0, 4],
+             [i, i, i, i, i, i, i, i, 0]]
+        d, r = floyd.solve(g)
+
+        self.assertListEqual(d, [[0, 3, 2, 5, 6, 6, 11, 10, 14],
+                                 [i, 0, 5, 2, 3, 9, 8, 8, 12],
+                                 [i, i, 0, i, 9, 4, 16, 8, 12],
+                                 [i, i, 3, 0, 1, 7, 6, 6, 10],
+                                 [i, i, i, i, 0, i, 7, 5, 9],
+                                 [i, i, i, i, 5, 0, 12, 4, 8],
+                                 [i, i, i, i, i, i, 0, 2, 4],
+                                 [i, i, i, i, i, i, i, 0, 4],
+                                 [i, i, i, i, i, i, i, i, 0]])
+
 
 
 if __name__ == "__main__":
