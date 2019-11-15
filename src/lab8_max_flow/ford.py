@@ -134,10 +134,10 @@ def ford(pairs, s, t):
 
         # выходим, если не наашли увеличивающего пути
         if t not in g:
-            return flow
+            return flow, cur_flow
 
         alpha, cur_flow = restore_flow(s, t, cur_flow, g, g_forward)
 
         flow += alpha
 
-    return flow
+    return flow, cur_flow

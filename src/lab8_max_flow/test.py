@@ -12,7 +12,7 @@ class MaxFlowTestCase(unittest.TestCase):
         ]
         s = 0
         t = 6
-        flow = ford(pairs, s, t)
+        flow, _ = ford(pairs, s, t)
 
         self.assertEqual(flow, 10)
     
@@ -28,7 +28,7 @@ class MaxFlowTestCase(unittest.TestCase):
         ]
         s = 0
         t = 7
-        flow = ford(pairs, s, t)
+        flow, _ = ford(pairs, s, t)
 
         self.assertEqual(flow, 10)
 
@@ -45,7 +45,7 @@ class MaxFlowTestCase(unittest.TestCase):
         ]
         s = 0
         t = 8
-        flow = ford(pairs, s, t)
+        flow, _ = ford(pairs, s, t)
 
         self.assertEqual(flow, 13)
     
@@ -63,7 +63,7 @@ class MaxFlowTestCase(unittest.TestCase):
         ]
         s = 0
         t = 9
-        flow = ford(pairs, s, t)
+        flow, _ = ford(pairs, s, t)
 
         self.assertEqual(flow, 5)
 
@@ -79,7 +79,7 @@ class MaxFlowTestCase(unittest.TestCase):
         ]
         s = 0
         t = 7
-        flow = ford(pairs, s, t)
+        flow, _ = ford(pairs, s, t)
 
         self.assertEqual(flow, 8)
 
