@@ -2,7 +2,7 @@ import unittest
 from ford import ford
 
 
-class MaxFlowTestCase(unittest.TestCase):
+class FordFulkersonTestCase(unittest.TestCase):
     def test_task1(self):
         pairs = [
             [0, 1, 4], [0, 3, 9], [1, 3, 2],
