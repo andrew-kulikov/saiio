@@ -2,12 +2,15 @@ import numpy as np
 from random import choices
 from functools import reduce
 
+class NoPlanException(Exception):
+    def __init__(self, message):
+        super(NoPlanException, self).__init__(message)
 
 class DualSimplex:
     def __init__(self, A, b, c, d_lo, d_hi):
         self.A = np.array(A)
-        self.b = np.array(b)
-        self.c = np.array(c)
+        self.b = b
+        self.c = c
         self.d_lo = np.array(d_lo)
         self.d_hi = np.array(d_hi)
 
@@ -24,6 +27,7 @@ class DualSimplex:
         Ab = np.zeros((m, m))
         cb = []
         
+        print('n: {}, m: {}'.format(n, m))
         print(Ab.shape, A.shape, len(J))
         for i, j in enumerate(J):
             Ab[:, i] = A[:, j]
@@ -33,10 +37,7 @@ class DualSimplex:
         print('A basic:')
         print(Ab)
 
-        if j0 == None:
-            Ab_inv = np.linalg.inv(Ab)
-        else:
-            Ab_inv = common.get_row_inversed(Ab_prev, Ab_prev_inv, A[:, j0], s)
+        Ab_inv = np.linalg.inv(Ab)
         u = np.dot(cb, Ab_inv)
         delta = np.dot(u, A) - c
 
@@ -63,6 +64,7 @@ class DualSimplex:
         print('z:', z)
 
         theta = []
+        print('J:', J)
         for i in range(m):
             if z[i] > 0:
                 theta.append(x[J[i]] / z[i])
@@ -102,8 +104,8 @@ class DualSimplex:
                 A_new[i] = A_new[i] * -1
         print('AAAA', A_new)
         print(self.b)
-        x = [0] * m + self.b
-        c = [0] * m + [-1] * n
+        x = [0] * n + self.b
+        c = [0] * n + [-1] * m
         J = list(range(n, n + m))
         print('x:', x)
 
@@ -159,7 +161,7 @@ class DualSimplex:
         if J is None:
             _, J, _ = self.find_optimal_plan()#choices(range(self.m), k=self.n)
         A_b = self.A[:, J]
-        c_b = self.c[J]
+        c_b = np.array(self.c)[J]
 
         B = np.linalg.inv(A_b)
 
@@ -240,7 +242,7 @@ class DualSimplex:
                 js = k
         
         if sigma0 == np.inf:
-            raise Exception("sdf")
+            raise NoPlanException("Нет допустимых планов")
         print('sigma =', sigma)
 
         delta_new = delta + sigma0 * mu

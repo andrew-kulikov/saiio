@@ -1,5 +1,5 @@
 import unittest
-from dual import DualSimplex
+from dual import DualSimplex, NoPlanException
 
 
 class SimplexTest(unittest.TestCase):
@@ -69,7 +69,7 @@ class SimplexTest(unittest.TestCase):
         x_expected = [3, 5, 0, 1.8779, 2.7545, 3.0965, 6, 3]
         for i, xi in enumerate(x):
             self.assertAlmostEqual(xi, x_expected[i], 4)
-        self.assertAlmostEqual(f_val, 49.6557, 4)
+        self.assertAlmostEqual(f_val, 49.6577, 4)
 
     def test_should_solve_task5(self):
         A = [[1, -3, 2, 0, 1, -1, 4, -1, 0],
@@ -100,9 +100,7 @@ class SimplexTest(unittest.TestCase):
         d_hi = [3, 2, 2, 5, 3, 4, 5]
 
         dual = DualSimplex(A, b, c, d_lo, d_hi)
-        x, J, f_val = dual.solve()
-
-        self.assertEqual(0, len(x))
+        self.assertRaises(NoPlanException, dual.solve)
     
     def test_should_solve_task7(self):
         A = [[2, -1, 1, 0, 0, -1, 3],
@@ -131,9 +129,8 @@ class SimplexTest(unittest.TestCase):
         d_hi = [7, 3, 2, 3, 4, 5]
 
         dual = DualSimplex(A, b, c, d_lo, d_hi)
-        x, J, f_val = dual.solve()
 
-        self.assertEqual(0, len(x))
+        self.assertRaises(NoPlanException, dual.solve)
     
     def test_should_solve_task9(self):
         A = [[1, 3, 1, -1, 0, -3, 2, 1],
