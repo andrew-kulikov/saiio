@@ -1,13 +1,19 @@
-from dual import DualSimplex
 import numpy as np
+
+from dual_task import DualTask
+from dual import DualSimplex
+
 
 
 class BranchAndBound:
-    def __init__(self, A, b, c, d_lo, d_hi):
-        self.A = np.array(A)
-        self.b = b
-        self.c = c
-        self.d_lo = np.array(d_lo)
-        self.d_hi = np.array(d_hi)
+    def __init__(self, initial_task):
+        self.initial_task = initial_task
 
-        self.n, self.m = self.A.shape
+        self.iteration = 0
+        self.queue = [initial_task]
+        self.mu = 0
+        self.x = None
+
+    def solve(self):
+        if self.iteration == 10000:
+            raise Exception("Достигнут лимит итераций")

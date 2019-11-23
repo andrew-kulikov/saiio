@@ -1,5 +1,6 @@
 import unittest
 from bnb import BranchAndBound
+from dual_task import DualTask
 
 
 class BranchAndBoundTestCase(unittest.TestCase):
@@ -12,8 +13,9 @@ class BranchAndBoundTestCase(unittest.TestCase):
         d_lo = [0, 0, 0, 0, 0, 0, 0, 0]
         d_hi = [3, 5, 5, 3, 4, 5, 6, 3]
 
-        dual = BranchAndBound(A, b, c, d_lo, d_hi)
-        x, J, f_val = dual.solve([3, 4, 5])
+        task = DualTask(A, b, c, d_lo, d_hi)
+        dual = BranchAndBound(task)
+        x, J, f_val = dual.solve()
 
         x_expected = [1, 1, 2, 2, 3, 3, 6, 3]
         for i, xi in enumerate(x):
