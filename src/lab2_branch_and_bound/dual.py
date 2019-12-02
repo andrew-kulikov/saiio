@@ -1,18 +1,19 @@
 import numpy as np
 from random import choices
 from functools import reduce
+from dual_task import DualTask
 
 class NoPlanException(Exception):
     def __init__(self, message):
         super(NoPlanException, self).__init__(message)
 
 class DualSimplex:
-    def __init__(self, A, b, c, d_lo, d_hi):
-        self.A = np.array(A)
-        self.b = b
-        self.c = c
-        self.d_lo = np.array(d_lo)
-        self.d_hi = np.array(d_hi)
+    def __init__(self, task: DualTask):
+        self.A = task.A
+        self.b = task.b
+        self.c = task.c
+        self.d_lo = task.d_lo
+        self.d_hi = task.d_hi
 
         self.n, self.m = self.A.shape
     
@@ -20,32 +21,32 @@ class DualSimplex:
         if iteration > 10000:
             raise OverflowError('Iterations limit reached')
 
-        print('ITERATION #{}'.format(iteration))
+        #print('ITERATION #{}'.format(iteration))
 
         m = len(A)
         n = len(x)
         Ab = np.zeros((m, m))
         cb = []
         
-        print('n: {}, m: {}'.format(n, m))
-        print(Ab.shape, A.shape, len(J))
+        #print('n: {}, m: {}'.format(n, m))
+        #print(Ab.shape, A.shape, len(J))
         for i, j in enumerate(J):
             Ab[:, i] = A[:, j]
             cb.append(c[j])
         
-        print()
-        print('A basic:')
-        print(Ab)
+        #print()
+        #print('A basic:')
+        #print(Ab)
 
         Ab_inv = np.linalg.inv(Ab)
         u = np.dot(cb, Ab_inv)
         delta = np.dot(u, A) - c
 
-        print(c, cb)
-        print('A basic inversed:')
-        print(Ab_inv)
-        print('u: {}'.format(u))
-        print('delta: {}'.format(delta))
+        # print(c, cb)
+        # print('A basic inversed:')
+        # print(Ab_inv)
+        # print('u: {}'.format(u))
+        # print('delta: {}'.format(delta))
     
         J_not_base = [i for i, t in enumerate(delta) if t < 0 and i not in J]
 
@@ -61,10 +62,10 @@ class DualSimplex:
         
         j0 = J_not_base[0]
         z = np.dot(Ab_inv, A[:, j0])
-        print('z:', z)
+        # print('z:', z)
 
         theta = []
-        print('J:', J)
+        # print('J:', J)
         for i in range(m):
             if z[i] > 0:
                 theta.append(x[J[i]] / z[i])
@@ -73,7 +74,7 @@ class DualSimplex:
         
         lowest_theta = np.min(theta)
 
-        print('Theta: {}'.format(theta))
+        # print('Theta: {}'.format(theta))
         if lowest_theta == np.inf:
             print('Function is not limited')
             return
@@ -89,9 +90,9 @@ class DualSimplex:
             if i != lowest_theta_pos:
                 x[j] -= lowest_theta * z[i]
 
-        print('New vector J:', J)
-        print('x #{} = {}'.format(iteration, x))
-        print()
+        # print('New vector J:', J)
+        # print('x #{} = {}'.format(iteration, x))
+        # print()
         return self.iterations(A, c, x, J, j0, lowest_theta_pos, Ab, Ab_inv, iteration + 1)
 
     def find_optimal_plan(self):
@@ -102,17 +103,17 @@ class DualSimplex:
             if bi < 0:
                 self.b[i] *= -1
                 A_new[i] = A_new[i] * -1
-        print('AAAA', A_new)
-        print(self.b)
+        # print('AAAA', A_new)
+        # print(self.b)
         x = [0] * n + self.b
         c = [0] * n + [-1] * m
         J = list(range(n, n + m))
-        print('x:', x)
+        # print('x:', x)
 
         A_new = np.hstack((A_new, np.eye(m)))
-        print(A_new)
+        # print(A_new)
         x_found, J_found = self.iterations(A_new, c, x, J)
-        print(x_found, J_found)
+        # print(x_found, J_found)
         for xi in x_found[n:]:
             if xi != 0:
                 print('Задача несовместна!')
@@ -120,13 +121,13 @@ class DualSimplex:
         
         A_base = A_new[:, J_found]
 
-        print()
-        print('A base:', A_base)
+        # print()
+        # print('A base:', A_base)
         n0 = n
         while True:
             J = list(range(n, n + m))
-            print('J_range:', set(J))
-            print('J_found', set(J_found))
+            # print('J_range:', set(J))
+            # print('J_found', set(J_found))
             if len(set(J) & set(J_found)) == 0:
                 break
             A_base = A_new[:, J_found]
@@ -153,7 +154,7 @@ class DualSimplex:
                             J_found[idd] -= 1
                     A_new = np.delete(A_new, i, axis=0)
                     A_new = np.delete(A_new, artificial_id, axis=1)
-                print('New J', J_found)
+                # print('New J', J_found)
                 break
         return A_new[:, :n0], J_found, x_found[:n0]
 
@@ -179,8 +180,8 @@ class DualSimplex:
         N[J_n] = [self.d_lo[j] if j in J_np else self.d_hi[j] for j in J_n]
 
         AjNj = reduce(lambda a, b: a + b, [self.A[:, j] * N[j] for j in J_n])
-        print('sum of Aj*Nj:', AjNj)
-        print('b - sum =', self.b - AjNj)
+        # print('sum of Aj*Nj:', AjNj)
+        # print('b - sum =', self.b - AjNj)
         N[J] = np.dot(B, self.b - AjNj)
 
         return N
@@ -198,38 +199,38 @@ class DualSimplex:
         return optimal, jk
 
     def __solve(self, J, J_n, J_nn, J_np, delta, B, iteration=0):
-        print()
-        print('#' * 20)
-        print('Iteration #{}'.format(iteration))
-        print('delta =', delta)
-        print('J_nn:', J_nn)
-        print('J_np:', J_np)
+        # print()
+        # print('#' * 20)
+        # print('Iteration #{}'.format(iteration))
+        # print('delta =', delta)
+        # print('J_nn:', J_nn)
+        # print('J_np:', J_np)
 
-        print('B:', B)
+        # print('B:', B)
         N = self.__build_N(J, B, J_n, J_np)
-        print('N:', N)
+        # print('N:', N)
         
         optimal, jk = self.__is_optimal(N, J)
         
         if optimal:
-            print('Ans: ', N, np.dot(self.c, N))
+            # print('Ans: ', N, np.dot(self.c, N))
             return N, J, np.dot(self.c, N)
         
         k = J.index(jk)
-        print('jk =', jk, 'k =', k)
+        # print('jk =', jk, 'k =', k)
         mu_jk = 1 if N[jk] < self.d_lo[jk] else -1 # 1 если меньше минимального, -1 если больше максимального
         
         dy = mu_jk * B[k]
-        print('dy =', dy)
+        # print('dy =', dy)
 
         mu = np.dot(dy, self.A)
         mu[jk] = mu_jk
-        print('mu =', mu)
+        # print('mu =', mu)
 
         sigma = {}
         for j in J_n:
             if j in J_np and mu[j] < 0 or j in J_nn and mu[j] > 0:
-                print('j = {} mu[j] = {}, delta[j] = {}'.format(j, mu[j], delta[j]))
+                # print('j = {} mu[j] = {}, delta[j] = {}'.format(j, mu[j], delta[j]))
                 sigma[j] = -delta[j] / mu[j]
             else:
                 sigma[j] = np.inf
@@ -243,13 +244,13 @@ class DualSimplex:
         
         if sigma0 == np.inf:
             raise NoPlanException("Нет допустимых планов")
-        print('sigma =', sigma)
+        # print('sigma =', sigma)
 
         delta_new = delta + sigma0 * mu
-        print('new delta =', delta_new)
+        # print('new delta =', delta_new)
 
         J[J.index(jk)] = js 
-        print('New J:', J)
+        # print('New J:', J)
         B = np.linalg.inv(self.A[:, J])
         
         if mu[jk] == 1 and js in J_np:
@@ -263,6 +264,6 @@ class DualSimplex:
         
         J_n = [i for i in range(self.m) if i not in J]
         J_nn = [j for j in J_n if j not in J_np]
-        print(J_np, J_nn)
+        # print(J_np, J_nn)
 
         return self.__solve(J, J_n, J_nn, J_np, delta_new, B, iteration + 1)
