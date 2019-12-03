@@ -57,7 +57,7 @@ class DualSimplex:
                 break 
 
         if is_optimal:
-            print('Optimal plan found')
+            #print('Optimal plan found')
             return x, J
         
         j0 = J_not_base[0]

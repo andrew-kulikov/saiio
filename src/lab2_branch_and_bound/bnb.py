@@ -8,7 +8,7 @@ import random
 
 
 def is_int(x):
-    return abs(int(x) - x) < 0.001
+    return abs(round(x) - x) < 0.001
 
 
 def all_int(a):
@@ -35,6 +35,7 @@ class BranchAndBound:
 
     def __split_task(self, task, x):
         pos, x_val = get_not_int(x)
+        #print('split by pos', pos, x_val)
         split_val = math.floor(x_val)
 
         task1 = DualTask(task.A, task.b, task.c, task.d_lo, task.d_hi)
@@ -46,6 +47,8 @@ class BranchAndBound:
         return task1, task2
 
     def solve(self):
+        #print('\n==================================')
+        
         if self.iteration == 10000:
             raise Exception("Достигнут лимит итераций")
         
@@ -54,22 +57,30 @@ class BranchAndBound:
 
         task = self.queue.pop(0)
         dual = DualSimplex(task)
-        x, _, f_val = dual.solve()
+
+        #print('Solving task: ')
+        #print(task.d_lo)
+        #print(task.d_hi)
+
+        try:
+            x, _, f_val = dual.solve()
+            x = np.around(x, decimals=4)
+        except Exception as e:
+            #print(e)
+            return
 
         if all_int(x):
-            self.mu = f_val
-            self.x = x
+            if self.mu < f_val:
+                self.mu = f_val
+                self.x = x
             return
         
         task1, task2 = self.__split_task(task, x)
-        print(task.d_lo)
-        print(task.d_hi)
 
-        print(task1.d_lo)
-        print(task1.d_hi)
+        #print(x)
+        #print('-----')
 
-        print(task2.d_lo)
-        print(task2.d_hi)
-
-
-
+        self.queue.append(task1)
+        self.queue.append(task2)
+        self.solve()
+        self.solve()
