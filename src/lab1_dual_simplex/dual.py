@@ -219,6 +219,7 @@ class DualSimplex:
         print('jk =', jk, 'k =', k)
         mu_jk = 1 if N[jk] < self.d_lo[jk] else -1 # 1 если меньше минимального, -1 если больше максимального
         
+        # k-я строка обратной матрицы
         dy = mu_jk * B[k]
         print('dy =', dy)
 

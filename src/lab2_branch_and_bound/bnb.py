@@ -69,6 +69,9 @@ class BranchAndBound:
             #print(e)
             return
 
+        if f_val < self.mu:
+            return
+
         if all_int(x):
             if self.mu < f_val:
                 self.mu = f_val
