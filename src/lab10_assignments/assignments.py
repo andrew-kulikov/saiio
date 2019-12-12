@@ -97,20 +97,6 @@ def assignment_solve(costs):
         costs = step2(current_flow, costs, L)            
 
 
-def get_sample_1():
-    costs = np.array([
-        [9, 6, 4, 9, 3, 8, 0],
-        [5, 8, 6, 8, 8, 3, 5],
-        [5, 2, 1, 1, 8, 6, 8],
-        [1, 0, 9, 2, 5, 9, 2],
-        [9, 2, 3, 3, 0, 3, 0],
-        [7, 3, 0, 9, 4, 5, 6],
-        [0, 9, 6, 0, 8, 8, 9]
-    ])
-
-    return costs
-
-
 def get_test_data():
     costs = np.array([
         [2, -1, 9, 4],
@@ -127,11 +113,6 @@ def main():
     ans, costs = assignment_solve(costs)
     print("Ans: ", ans)
     print("Costs: ", costs)
-
-    costs = get_sample_1()
-    # ans, costs = solve(costs)
-    #print("Ans: ", ans)
-    #print("Costs: ", costs)
 
 
 if __name__ == '__main__':

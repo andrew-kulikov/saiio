@@ -3,6 +3,7 @@ from dual import DualSimplex
 import numpy as np
 import math
 import random
+import scipy.optimize as sco
 
 
 def select_first_not_int(J, x):
