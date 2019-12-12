@@ -158,9 +158,19 @@ class DualSimplex:
                 break
         return A_new[:, :n0], J_found, x_found[:n0]
 
+    def find_plan(self):
+        while True:
+            J = choices(range(self.m), k=self.n)
+            try:
+                if np.linalg.det(self.A[:, J]):
+                    return J
+            except:
+                pass
+
     def solve(self, J=None):
         if J is None:
-            _, J, _ = self.find_optimal_plan()#choices(range(self.m), k=self.n)
+            J = self.find_plan()
+            #self.A, J, _ = self.find_optimal_plan()
         A_b = self.A[:, J]
         c_b = np.array(self.c)[J]
 
