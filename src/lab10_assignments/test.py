@@ -17,7 +17,7 @@ class AssignmentTestCase(unittest.TestCase):
 
         self.assertEqual(cost, 1)
         self.assertListEqual(ans, [1, 0, 2, 3])
-    
+
     def test_task2(self):
         costs = np.array([
             [6, 4, 13, 4, 19, 15, 11, 8],
@@ -35,3 +35,12 @@ class AssignmentTestCase(unittest.TestCase):
 
         self.assertEqual(cost, 23)
         self.assertListEqual(ans, [3, 7, 0, 6, 1, 4, 2, 5])
+
+    def test_task3(self):
+        costs = np.array([[5, 0, 7, 3],
+                          [11, 0, 10, 4],
+                          [0, 2, 3, 2],
+                          [1, 3, 0, 5]])
+
+        assignment = Assignments()
+        ans, cost = assignment.solve(costs)
