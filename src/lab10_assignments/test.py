@@ -43,4 +43,4 @@ class AssignmentTestCase(unittest.TestCase):
                           [1, 3, 0, 5]])
 
         assignment = Assignments()
-        ans, cost = assignment.solve(costs)
+        _, _ = assignment.solve(costs)
